@@ -24,7 +24,7 @@ def create_battleships(game_board):
         game_board[battleship_row][battleship_column] = 'X'
 
 
-def get_location_of_ship():
+def get_location_of_battleship():
     board_row = input('Please enter a ship row 1-8')
     while board_row not in '12345678':
         print('Please enter a valid row')
@@ -36,10 +36,13 @@ def get_location_of_ship():
     return int(board_row) - 1, letters_to_numbers[board_column]
 
 
-
-def count_hit_ships():
-    pass
-
+def count_hit_battleships(game_board):
+    count = 0
+    for battleship_row in game_board:
+        for battleship_column in battleship_row:
+            if battleship_column == 'X':
+                count += 1
+    return count
 
 create_battleships()
 turns = 10
