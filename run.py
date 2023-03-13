@@ -25,7 +25,16 @@ def create_battleships(game_board):
 
 
 def get_location_of_ship():
-    pass
+    board_row = input('Please enter a ship row 1-8')
+    while board_row not in '12345678':
+        print('Please enter a valid row')
+        board_row = input('Please enter a ship row 1-8')
+    board_column = input('Please enter a ship column A-H').upper()
+    while board_column not in 'ABCDEFGH':
+        print('Please enter a valid column')
+        board_column = input('Please enter a ship column A-H').upper()
+    return int(board_row) - 1, letters_to_numbers[board_column]
+
 
 
 def count_hit_ships():
