@@ -14,8 +14,8 @@ def print_game_board(game_board):
     print("  A B C D E F G H")
     print("  +-+-+-+-+-+-+-+")
     row_number = 1
-    for row in game_board:
-        print("%d|%s" % (row_number, "|".join(row)))
+    for board_row in game_board:
+        print("%d|%s" % (row_number, "|".join(board_row)))
         row_number += 1
 
 
@@ -27,35 +27,35 @@ def place_battleships(game_board):
                 if check_if_battleship_fits(battleship_length, board_row, board_column, board_orientation):
                     if check_if_battleship_overlaps(game_board, board_row, board_column, board_orientation, battleship_length) == False:
                         if board_orientation == "H":
-                            for x in range(board_column, board_column + battleship_length):
-                                game_board[board_row][x] = "X"
+                            for i in range(board_column, board_column + battleship_length):
+                                game_board[board_row][i] = "X"
                         else:
-                            for x in range(board_row, board_row + battleship_length):
-                                game_board[x][board_column] = "X"
+                            for i in range(board_row, board_row + battleship_length):
+                                game_board[i][board_column] = "X"
                         break
             else:
                 place_battleships = True
                 print('Place your ship with a length of ' + str(battleship_length))
                 board_row, board_column, board_orientation = user_input(place_battleships)
-                if check_if_battleship_fits(board_row, board_column, board_orientation, battleship_length):
+                if check_if_battleship_fits(battleship_length, board_row, board_column, board_orientation):
                     if check_if_battleship_overlaps(game_board, board_row, board_column, board_orientation, battleship_length) == False:
                         if board_orientation == "H":
-                            for x in range(board_column, board_column + battleship_length):
-                                game_board[board_row][x] = "X"
+                            for i in range(board_column, board_column + battleship_length):
+                                game_board[board_row][i] = "X"
                         else:
-                            for x in range(board_row, board_row + battleship_length):
-                                game_board[x][board_column] = "X"
+                            for i in range(board_row, board_row + battleship_length):
+                                game_board[i][board_column] = "X"
                         break
 
 
-def check_if_battleship_fits(battleship_length, board_row, board_column, board_orientation):
+def check_if_battleship_fits(BATTLESHIP_LENGTH, board_row, board_column, board_orientation):
     if board_orientation == "H":
-        if board_column + battleship_length > 8:
+        if board_column + BATTLESHIP_LENGTH > 8:
             return False
         else:
             return True
     else:
-        if board_row + battleship_length > 8:
+        if board_row + BATTLESHIP_LENGTH > 8:
             return False
         else:
             return True
@@ -63,13 +63,14 @@ def check_if_battleship_fits(battleship_length, board_row, board_column, board_o
 
 def check_if_battleship_overlaps(game_board, board_row, board_column, board_orientation, battleship_length):
     if board_orientation == "H":
-        for x in range(board_column, board_column + battleship_length):
-            if game_board[board_row][x] == "X":
+        for i in range(board_column, board_column + battleship_length):
+            if game_board[board_row][i] == "X":
                 return True
     else:
-        for x in range(board_row, board_row + battleship_length):
-            if game_board[x][board_column] == "X":
+        for i in range(board_row, board_row + battleship_length):
+            if game_board[i][board_column] == "X":
                 return True
+    return False
 
 
 def user_input(place_battleships):
@@ -91,7 +92,7 @@ def user_input(place_battleships):
                 print('Please enter a valid number, between 1 and 8')
         while True:
             try:
-                board_column = input("Enter the letter for the column you want to place your ship on: ")
+                board_column = input("Enter the letter for the column you want to place your ship on: ").upper()
                 if board_column in 'ABCDEFGH':
                     board_column = LETTERS_TO_NUMBERS[board_column]
                     break
@@ -109,7 +110,7 @@ def user_input(place_battleships):
                 print('Please enter a valid number, between 1 and 8')
         while True:
             try:
-                board_column = input("Enter the letter for the column you want to attack: ")
+                board_column = input("Enter the letter for the column you want to attack: ").upper()
                 if board_column in 'ABCDEFGH':
                     board_column = LETTERS_TO_NUMBERS[board_column]
                     break
@@ -119,7 +120,6 @@ def user_input(place_battleships):
 
 
 def count_hit_battleships(game_board):
-    pass
     count = 0
     for battleship_row in game_board:
         for battleship_column in battleship_row:
@@ -130,25 +130,25 @@ def count_hit_battleships(game_board):
 
 def turn(game_board):
     if game_board == PLAYER_GUESS_GAME_BOARD:
-        battleship_row, battleship_column = user_input(PLAYER_GUESS_GAME_BOARD)
-        if game_board[battleship_row][battleship_column] == "-":
+        board_row, board_column = user_input(PLAYER_GUESS_GAME_BOARD)
+        if game_board[board_row][board_column] == "-":
             turn(game_board)
-        elif game_board[battleship_row][battleship_column] == "X":
+        elif game_board[board_row][board_column] == "X":
             turn(game_board)
-        elif COMPUTER_GAME_BOARD[battleship_row][battleship_column] == "X":
-            game_board[battleship_row][battleship_column] == "X"
+        elif COMPUTER_GAME_BOARD[board_row][board_column] == "X":
+            game_board[board_row][board_column] == "X"
         else:
-            game_board[battleship_row][battleship_column] = "-"
+            game_board[board_row][board_column] = "-"
     else:
-        battleship_row, battleship_column = random.randint(0, 7), random.randint(0, 7)
-        if game_board[battleship_row][battleship_column] == "-":
+        board_row, board_column = random.randint(0, 7), random.randint(0, 7)
+        if game_board[board_row][board_column] == "-":
             turn(game_board)
-        elif game_board[battleship_row][battleship_column] == "X":
+        elif game_board[board_row][board_column] == "X":
             turn(game_board)
-        elif PLAYER_GAME_BOARD[battleship_row][battleship_column] == "X":
-            game_board[battleship_row][battleship_column] == "X"
+        elif PLAYER_GAME_BOARD[board_row][board_column] == "X":
+            game_board[board_row][board_column] == "X"
         else:
-            game_board[battleship_row][battleship_column] = "-"
+            game_board[board_row][board_column] = "-"
 
 
 place_battleships(COMPUTER_GAME_BOARD)
@@ -159,7 +159,7 @@ place_battleships(PLAYER_GAME_BOARD)
 while True:
     while True:
         print('Guess the computers battleships location!')
-        print_game_board(PLAYER_GAME_BOARD)
+        print_game_board(PLAYER_GUESS_GAME_BOARD)
         turn(PLAYER_GUESS_GAME_BOARD)
         break
     if count_hit_battleships(PLAYER_GUESS_GAME_BOARD) == 17:
