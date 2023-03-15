@@ -1,5 +1,4 @@
 import random
-from random import randint
 
 
 LENGTH_OF_BATTLESHIPS = [2, 3, 3, 4, 5]
@@ -51,7 +50,7 @@ def place_battleships(game_board):
 
 def check_if_battleship_fits(battleship_length, board_row, board_column, board_orientation):
     if board_orientation == "H":
-        if board_column + battleship_length >8:
+        if board_column + battleship_length > 8:
             return False
         else:
             return True
@@ -74,7 +73,7 @@ def check_if_battleship_overlaps(game_board, board_row, board_column, board_orie
 
 
 def user_input(place_battleships):
-    if place_battleships = True:
+    if place_battleships == True:
         while True:
             try:
                 board_orientation = input("Enter orientation, Key: H = Horizontal | V = Vertical (H or V): ").upper()
@@ -118,54 +117,58 @@ def user_input(place_battleships):
                 print('Please enter a valid letter, between A and H')
         return board_row, board_column
 
-# def create_battleships(game_board):
-#     for battleship in range(5):
-#         battleship_row, battleship_column = randint(0, 7), randint(0, 7)
-#         while game_board[battleship_row][battleship_column] == 'X':
-#             battleship_row, battleship_column = randint(0, 7), randint(0, 7)
-#         game_board[battleship_row][battleship_column] = 'X'
-# def get_location_of_battleship():
-#     board_row = input('Please enter a ship row 1-8: ')
-#     while board_row not in '12345678':
-#         print('Please enter a valid row')
-#         board_row = input('Please enter a ship row 1-8: ')
-#     board_column = input('Please enter a ship column A-H: ').upper()
-#     while board_column not in 'ABCDEFGH':
-#         print('Please enter a valid column')
-#         board_column = input('Please enter a ship column A-H: ').upper()
-#     return int(board_row) - 1, LETTERS_TO_NMUBERS[board_column]
-
 
 def count_hit_battleships(game_board):
     pass
-    # count = 0
-    # for battleship_row in game_board:
-    #     for battleship_column in battleship_row:
-    #         if battleship_column == 'X':
-    #             count += 1
-    # return count
+    count = 0
+    for battleship_row in game_board:
+        for battleship_column in battleship_row:
+            if battleship_column == 'X':
+                count += 1
+    return count
 
-# create_battleships(HIDDEN_GAME_BOARD)
-# print_game_board(HIDDEN_GAME_BOARD)
-# turns = 10
-# while turns > 0:
-#     print('Welcome to Battleship!')
-#     print_game_board(GUESS_GAME_BOARD)
-#     battleship_row, battleship_column = get_location_of_battleship()
-#     if GUESS_GAME_BOARD[battleship_row][battleship_column] == '-':
-#         print('Oops it looks like youve already guessed that!')
-#     elif HIDDEN_GAME_BOARD[battleship_row][battleship_column] == 'X':
-#         print('Woo! That is a HIT!')
-#         GUESS_GAME_BOARD[battleship_row][battleship_column] = 'X'
-#         turns -= 1
-#     else:
-#         print('Oh no! That was a miss.')
-#         GUESS_GAME_BOARD[battleship_row][battleship_column] = '-'
-#         turns -= 1
-#     if count_hit_battleships(GUESS_GAME_BOARD) == 5:
-#         print('Congratulations, you have sunk all of the computers battleships!')
-#         break
-#     print('you have ' + str(turns) + ' turns remaining.')
-#     if turns == 0:
-#         print('You ran out of turns! Game Over')
-#         break
+
+def turn(game_board):
+    if game_board == PLAYER_GUESS_GAME_BOARD:
+        battleship_row, battleship_column = user_input(PLAYER_GUESS_GAME_BOARD)
+        if game_board[battleship_row][battleship_column] == "-":
+            turn(game_board)
+        elif game_board[battleship_row][battleship_column] == "X":
+            turn(game_board)
+        elif COMPUTER_GAME_BOARD[battleship_row][battleship_column] == "X":
+            game_board[battleship_row][battleship_column] == "X"
+        else:
+            game_board[battleship_row][battleship_column] = "-"
+    else:
+        battleship_row, battleship_column = random.randint(0, 7), random.randint(0, 7)
+        if game_board[battleship_row][battleship_column] == "-":
+            turn(game_board)
+        elif game_board[battleship_row][battleship_column] == "X":
+            turn(game_board)
+        elif PLAYER_GAME_BOARD[battleship_row][battleship_column] == "X":
+            game_board[battleship_row][battleship_column] == "X"
+        else:
+            game_board[battleship_row][battleship_column] = "-"
+
+
+place_battleships(COMPUTER_GAME_BOARD)
+print_game_board(COMPUTER_GAME_BOARD)
+print_game_board(PLAYER_GAME_BOARD)
+place_battleships(PLAYER_GAME_BOARD)
+
+while True:
+    while True:
+        print('Guess the computers battleships location!')
+        print_game_board(PLAYER_GAME_BOARD)
+        turn(PLAYER_GUESS_GAME_BOARD)
+        break
+    if count_hit_battleships(PLAYER_GUESS_GAME_BOARD) == 17:
+        print("Congratulations! You win.")
+        break
+    while True:
+        turn(COMPUTER_GUESS_GAME_BOARD)
+        break
+    print_game_board(COMPUTER_GUESS_GAME_BOARD)
+    if count_hit_battleships(COMPUTER_GUESS_GAME_BOARD) == 17:
+        print("Oh no! The computer has sunk all of your ships, you lose!")
+        break
