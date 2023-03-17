@@ -19,10 +19,18 @@ def starting_menu():
     clear_console()
     print(
         """
-___  ____ ___ ___ _    ____ ____ _  _ _ ___  
-|__] |__|  |   |  |    |___ [__  |__| | |__] 
-|__] |  |  |   |  |___ |___ ___] |  | | |   \n
-"""
+        _ _ _ ____ _    ____ ____ _  _ ____    ___ ____ 
+        | | | |___ |    |    |  | |\/| |___     |  |  | 
+        |_|_| |___ |___ |___ |__| |  | |___     |  |__|\n 
+          ___  ____ ___ ___ _    ____ ____ _  _ _ ___  
+          |__] |__|  |   |  |    |___ [__  |__| | |__] 
+          |__] |  |  |   |  |___ |___ ___] |  | | |   \n      
+        """
+    )
+    print(
+        """
+        
+        """
     )
     while True:
         try:
@@ -48,11 +56,13 @@ ___  ____ ___ ___ _    ____ ____ _  _ _ ___
         and the y axis respectively.
         - The ship will start at the starting point and will take up
         the size of the ship in direction input.
-    3. Attack the computers side of the board. You can attack the
+    2. Attack the computers side of the board. You can attack the
         computer by using the coordinates similar to placing your
         ships. An x represents a hit and an - represents a miss.
-    4. The game is won when a player get 17 hits on their opponents
-        board\n""",
+    3. The game is won when a player get 17 hits on their opponents
+        board
+    4. Remember, you are always allowed to quit the game by pressing 'Q'
+        your progress will not be saved.\n""",
                         "yellow",
                     )
                 )
@@ -68,6 +78,10 @@ ___  ____ ___ ___ _    ____ ____ _  _ _ ___
                 )
             )
     clear_console()
+
+
+def create_user():
+    name = input(colored("Please give your username:\n", "green"))
 
 
 def print_game_board(game_board):
@@ -143,35 +157,47 @@ def user_input(place_battleships):
         while True:
             try:
                 board_orientation = input("Enter orientation, Key: H = Horizontal | V = Vertical (H or V) or Q to quit: ").upper()
-                # if board_orientation == 'Q':
-                #     print(f"You have quit the game.")
-                #     print("Hope you come back soon!")
-                # return 'Q'
+                if board_orientation == 'Q':
+                    print(f"You have quit the game.")
+                    print("Hope you come back soon!")
+                return 'Q'
                 if board_orientation == "H" or board_orientation == "V":
                     break
             except TypeError:
-                print('Please enter a valid orientation, either H or V')
+                print('Please enter a valid orientation, either H or V or Q to quit: ')
         while True:
             try:
                 board_row = input("Enter the number for the row you want to place your ship on: ")
+                if board_orientation == 'Q':
+                    print(f"You have quit the game.")
+                    print("Hope you come back soon!")
+                return 'Q'
                 if board_row in '12345678':
                     board_row = int(board_row) - 1
                     break
             except ValueError:
-                print('Please enter a valid number, between 1 and 8')
+                print('Please enter a valid number, between 1 and 8 or Q to quit: ')
         while True:
             try:
                 board_column = input("Enter the letter for the column you want to place your ship on: ").upper()
+                if board_orientation == 'Q':
+                    print(f"You have quit the game.")
+                    print("Hope you come back soon!")
+                return 'Q'
                 if board_column in 'ABCDEFGH':
                     board_column = LETTERS_TO_NUMBERS[board_column]
                     break
             except KeyError:
-                print('Please enter a valid letter, between A and H')
+                print('Please enter a valid letter, between A and H or Q to quit: ')
         return board_row, board_column, board_orientation
     else:
         while True:
             try:
                 board_row = input("Please enter the number for the row you want attack: ")
+                if board_orientation == 'Q':
+                    print(f"You have quit the game.")
+                    print("Hope you come back soon!")
+                return 'Q'
                 if board_row in '12345678':
                     board_row = int(board_row) - 1
                     break
@@ -180,6 +206,10 @@ def user_input(place_battleships):
         while True:
             try:
                 board_column = input("Enter the letter for the column you want to attack: ").upper()
+                if board_orientation == 'Q':
+                    print(f"You have quit the game.")
+                    print("Hope you come back soon!")
+                return 'Q'
                 if board_column in 'ABCDEFGH':
                     board_column = LETTERS_TO_NUMBERS[board_column]
                     break
@@ -221,6 +251,7 @@ def turn(game_board):
 
 
 starting_menu()
+create_user()
 place_battleships(COMPUTER_GAME_BOARD)
 print_game_board(COMPUTER_GUESS_GAME_BOARD)
 print_game_board(PLAYER_GAME_BOARD)
