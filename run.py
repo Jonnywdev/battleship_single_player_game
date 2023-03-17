@@ -1,4 +1,6 @@
 import random
+from termcolor import colored
+from utilis import clear_console
 
 
 LENGTH_OF_BATTLESHIPS = [2, 3, 3, 4, 5]
@@ -8,6 +10,64 @@ PLAYER_GUESS_GAME_BOARD = [[" "] * 8 for x in range(8)]
 COMPUTER_GUESS_GAME_BOARD = [[" "] * 8 for x in range(8)]
 LETTERS_TO_NUMBERS = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5, 'G': 6,
                       'H': 7}
+
+
+def starting_menu():
+    """
+    Opening screen to the game
+    """
+    clear_console()
+    print(
+        """
+___  ____ ___ ___ _    ____ ____ _  _ _ ___  
+|__] |__|  |   |  |    |___ [__  |__| | |__] 
+|__] |  |  |   |  |___ |___ ___] |  | | |   \n
+"""
+    )
+    while True:
+        try:
+            instruction = input(
+                colored(
+                    "Type p to play or i for instructions and press Enter:\n",
+                    "blue"
+                )
+            ).upper()
+            # if its i give the instructions
+            if instruction == "I":
+                print(
+                    colored(
+                        """
+    1. Place your ships on the board:
+        - You will be told the size of the ship you have to place
+        (there are 5 in total).
+        - You will then be asked for a direction to place your your
+        ship (H for Horizontal or V for Vertical).
+        - You will then asked for a starting point this is a point on the
+        board that the ship starts at. You select this point with a
+        number (1 - 8) and a letter (A - H), which represent the x
+        and the y axis respectively.
+        - The ship will start at the starting point and will take up
+        the size of the ship in direction input.
+    3. Attack the computers side of the board. You can attack the
+        computer by using the coordinates similar to placing your
+        ships. An x represents a hit and an - represents a miss.
+    4. The game is won when a player get 17 hits on their opponents
+        board\n""",
+                        "yellow",
+                    )
+                )
+            elif instruction == "P":
+                break
+            else:
+                raise ValueError()
+        except (AttributeError, ValueError):
+            print(
+                colored(
+                    "Please type p to play or i for instructions and press Enter",
+                    "red"
+                )
+            )
+    clear_console()
 
 
 def print_game_board(game_board):
@@ -40,11 +100,16 @@ def place_battleships(game_board):
                 if check_if_battleship_fits(battleship_length, board_row, board_column, board_orientation):
                     if check_if_battleship_overlaps(game_board, board_row, board_column, board_orientation, battleship_length) == False:
                         if board_orientation == "H":
-                            for i in range(board_column, board_column + battleship_length):
+                            for i in range(board_column, board_column +
+                                           battleship_length):
                                 game_board[board_row][i] = "X"
                         else:
-                            for i in range(board_row, board_row + battleship_length):
+                            for i in range(board_row, board_row +
+                                           battleship_length):
                                 game_board[i][board_column] = "X"
+                    else:
+                        print("You already have a ship in this location,\
+                               please try again.")
                         break
 
 
@@ -77,7 +142,11 @@ def user_input(place_battleships):
     if place_battleships == True:
         while True:
             try:
-                board_orientation = input("Enter orientation, Key: H = Horizontal | V = Vertical (H or V): ").upper()
+                board_orientation = input("Enter orientation, Key: H = Horizontal | V = Vertical (H or V) or Q to quit: ").upper()
+                # if board_orientation == 'Q':
+                #     print(f"You have quit the game.")
+                #     print("Hope you come back soon!")
+                # return 'Q'
                 if board_orientation == "H" or board_orientation == "V":
                     break
             except TypeError:
@@ -151,13 +220,14 @@ def turn(game_board):
             game_board[board_row][board_column] = "-"
 
 
+starting_menu()
 place_battleships(COMPUTER_GAME_BOARD)
-print_game_board(COMPUTER_GAME_BOARD)
+print_game_board(COMPUTER_GUESS_GAME_BOARD)
 print_game_board(PLAYER_GAME_BOARD)
 place_battleships(PLAYER_GAME_BOARD)
 
 while True:
-    while True:
+    while True:   
         print('Guess the computers battleships location!')
         print_game_board(PLAYER_GUESS_GAME_BOARD)
         turn(PLAYER_GUESS_GAME_BOARD)
